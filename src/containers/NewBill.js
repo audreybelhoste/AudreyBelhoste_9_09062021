@@ -19,15 +19,24 @@ export default class NewBill {
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
-    this.firestore
-      .storage
-      .ref(`justificatifs/${fileName}`)
-      .put(file)
-      .then(snapshot => snapshot.ref.getDownloadURL())
-      .then(url => {
-        this.fileUrl = url
-        this.fileName = fileName
-      })
+
+	const extensionCheck = /(png|jpg|jpeg)/g
+    const extension = fileName.split(".").pop().toLowerCase()
+
+	if(extension.match(extensionCheck)){
+		this.firestore
+		.storage
+		.ref(`justificatifs/${fileName}`)
+		.put(file)
+		.then(snapshot => snapshot.ref.getDownloadURL())
+		.then(url => {
+		  this.fileUrl = url
+		  this.fileName = fileName
+		})
+	} else {
+		alert("Invalid file.")
+		this.document.querySelector(`input[data-testid="file"]`).value = null
+	}
   }
   handleSubmit = e => {
     e.preventDefault()
