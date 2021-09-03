@@ -4,9 +4,11 @@ import { bills } from "../fixtures/bills.js"
 import { localStorageMock } from '../__mocks__/localStorage'
 import { ROUTES, ROUTES_PATH } from '../constants/routes'
 import firebase from '../__mocks__/firebase'
-import Firestore from "../app/Firestore";
 import Router from "../app/Router";
 import Bills from '../containers/Bills.js'
+import '@testing-library/jest-dom/extend-expect'
+import userEvent from '@testing-library/user-event'
+import Firestore from "../app/Firestore.js"
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
@@ -25,7 +27,9 @@ describe("Given I am connected as an employee", () => {
       Object.defineProperty(window, "location", { value: { hash: pathname } })
       document.body.innerHTML = `<div id='root'>${html}</div>`
       Router()
-      //to-do write expect expression
+	  const onNavigate = (pathname) => {
+		document.body.innerHTML = ROUTES({ pathname })
+	}
 	  expect(screen.getByTestId("icon-window").classList).toContain("active-icon")
     })
 
@@ -56,18 +60,22 @@ describe("Given I am connected as an employee", () => {
   
     describe('When I click on the New Bill button', () => {
       test('Then it should display the New Bill Page', () => {
+
+		const onNavigate = (pathname) => {
+			document.body.innerHTML = ROUTES({ pathname })
+		}
+
         Object.defineProperty(window, 'localStorage', { value: localStorageMock })
         window.localStorage.setItem('user', JSON.stringify({
           type: 'Employee'
         }))
+
+		const billsList = new Bills({
+			document, onNavigate, firestore:null, localStorage: window.localStorage
+		  })
+
         const html = BillsUI({ data:[]})
         document.body.innerHTML = html
-        const onNavigate = (pathname) => {
-          document.body.innerHTML = ROUTES({ pathname })
-        }
-        const billsList = new Bills({
-          document, onNavigate, firestore:null, localStorage: window.localStorage
-        })
   
         const handleClickNewBill = jest.fn(billsList.handleClickNewBill)
         const buttonNewBill = screen.getByTestId('btn-new-bill')
