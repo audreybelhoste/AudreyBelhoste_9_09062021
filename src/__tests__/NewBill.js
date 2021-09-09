@@ -8,8 +8,6 @@ import firestore from "../app/Firestore";
 import firebase from "../__mocks__/firebase";
 import { ROUTES, ROUTES_PATH } from "../constants/routes";
 
-jest.mock("../app/Firestore");
-
 describe("Given I am connected as an employee", () => {
   describe("When I am on NewBill Page", () => {
     test("Then it should render NewBill page", () => {
@@ -111,4 +109,4 @@ describe("Given I am a user connected as Employee", () => {
 		expect(message).toBeTruthy()
 	  });
 	});
-  });
+});

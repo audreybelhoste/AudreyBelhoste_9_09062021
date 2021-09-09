@@ -65,6 +65,7 @@ export default {
       }]
     })
   },
+  
   post: async (bill) => {
     const getData = await firebase.get();
 

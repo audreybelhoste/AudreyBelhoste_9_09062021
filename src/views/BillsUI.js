@@ -22,12 +22,6 @@ const row = (bill) => {
 
 const rows = (data) => {
   const ordererData = data && data.length ? data.sort((a, b) => new Date(b.date) - new Date(a.date)) : ""
-//   const ordererData = data && data.length ? data.sort((a, b) => {
-// 	  a = new Date(a.date)
-// 	  b = new Date(b.date)
-// 	  return a > b ? -1 : a < b ? 1 : 0;
-//   }) : ""
-//   console.log(ordererData)
   return (data && data.length) ? ordererData.map(bill => row(bill)).join("") : ""
 }
 
